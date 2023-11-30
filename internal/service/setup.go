@@ -1,14 +1,13 @@
-package setup
+package service
 
 import (
 	"essemfly/go_base_app/config"
 	"essemfly/go_base_app/internal/db"
-	"essemfly/go_base_app/internal/service"
 )
 
 type Services struct {
-	MyService      *service.MyService
-	AnotherService *service.AnotherService
+	MyService      *MyService
+	AnotherService *AnotherService
 }
 
 func InitializeServices(cfg config.Config) (*Services, error) {
@@ -17,8 +16,8 @@ func InitializeServices(cfg config.Config) (*Services, error) {
 		return nil, err
 	}
 
-	myService := service.NewMyService(database)
-	anotherService := service.NewAnotherService(database)
+	myService := NewMyService(database)
+	anotherService := NewAnotherService(database)
 
 	return &Services{
 		MyService:      myService,

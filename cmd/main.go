@@ -2,11 +2,11 @@ package main
 
 import (
 	"essemfly/go_base_app/config"
-	"essemfly/go_base_app/setup"
+	"essemfly/go_base_app/internal/handler"
+	"essemfly/go_base_app/internal/service"
 	"fmt"
 
 	"log"
-	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
@@ -19,16 +19,13 @@ func main() {
 
 	log.Println("Starting server on port:", cfg.Port)
 
-	_, err = setup.InitializeServices(cfg)
+	services, err := service.InitializeServices(cfg)
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	r := gin.Default()
-	r.GET("/ping", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{
-			"message": "pong",
-		})
-	})
+	handler.SetupRoutes(r, services)
+
 	r.Run(fmt.Sprintf(":%d", cfg.Port))
 }
