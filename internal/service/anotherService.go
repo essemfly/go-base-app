@@ -1,12 +1,12 @@
 package service
 
-import "essemfly/go_base_app/internal/db"
+import "essemfly/go_base_app/internal/persistence/database"
 
 type AnotherService struct {
-	db db.Database
+	db database.DB
 }
 
-func NewAnotherService(db db.Database) *AnotherService {
+func NewAnotherService(db database.DB) *AnotherService {
 	return &AnotherService{db: db}
 }
 

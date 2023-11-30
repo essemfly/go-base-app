@@ -1,7 +1,7 @@
 package service_test
 
 import (
-	"essemfly/go_base_app/internal/db"
+	"essemfly/go_base_app/internal/persistence/database"
 	"essemfly/go_base_app/internal/service"
 	"testing"
 
@@ -9,7 +9,7 @@ import (
 )
 
 func TestMyService(t *testing.T) {
-	mockDb := &db.MockDatabase{}
+	mockDb := &database.MockDatabase{}
 
 	myService := service.NewMyService(mockDb)
 
