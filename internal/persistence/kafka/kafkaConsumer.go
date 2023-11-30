@@ -23,14 +23,22 @@ func NewKafkaConsumer(cfg config.Config) (*KafkaConsumer, error) {
 	}, nil
 }
 
-func (kc *KafkaConsumer) ConsumeMessages(topic string) {
+func (kc *KafkaConsumer) ConsumeMessages(topic string) []map[string]string {
 	partitionConsumer, err := kc.consumer.ConsumePartition(topic, 0, sarama.OffsetNewest)
 	if err != nil {
 		log.Fatalf("Partition consumer 생성 실패: %s", err.Error())
 	}
 	defer partitionConsumer.Close()
 
-	for message := range partitionConsumer.Messages() {
-		log.Printf("메시지 수신: Key: %s, Value: %s", string(message.Key), string(message.Value))
+	var messages []map[string]string
+
+	msgs := partitionConsumer.Messages()
+	for msg := range msgs {
+		messages = append(messages, map[string]string{
+			"key":   string(msg.Key),
+			"value": string(msg.Value),
+		})
 	}
+
+	return messages
 }

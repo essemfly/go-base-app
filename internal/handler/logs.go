@@ -15,7 +15,7 @@ type LogHandler struct {
 }
 
 func (h *LogHandler) PostLogs(c *gin.Context) {
-	var logData domain.Log
+	var logData domain.LogData
 	if err := c.BindJSON(&logData); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -24,6 +24,7 @@ func (h *LogHandler) PostLogs(c *gin.Context) {
 	jsonData, err := json.Marshal(logData)
 	if err != nil {
 		log.Fatalf("JSON 직렬화 실패: %s", err)
+		return
 	}
 
 	if err := h.Services.LogService.CreateLog(string(jsonData)); err != nil {
@@ -33,9 +34,13 @@ func (h *LogHandler) PostLogs(c *gin.Context) {
 }
 
 func (h *LogHandler) GetAnalytics(c *gin.Context) {
-	c.JSON(200, gin.H{
-		"message": "pong",
-	})
+	result, err := h.Services.LogService.GetLatestLogAnalytics()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(200, result)
 }
 
 func NewLogsHandler(services *service.Services) *LogHandler {
