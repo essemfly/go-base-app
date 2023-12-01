@@ -27,8 +27,9 @@ func NewKafkaProducer(cfg config.Config) (*KafkaProducer, error) {
 
 func (kp *KafkaProducer) SendMessage(topic, message string) error {
 	msg := sarama.ProducerMessage{
-		Topic: topic,
-		Value: sarama.StringEncoder(message),
+		Topic:     topic,
+		Value:     sarama.StringEncoder(message),
+		Partition: int32(0),
 	}
 
 	_, _, err := kp.producer.SendMessage(&msg)

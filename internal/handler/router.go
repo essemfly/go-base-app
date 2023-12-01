@@ -13,6 +13,8 @@ func SetupRoutes(r *gin.Engine, services *service.Services) {
 	r.GET("/ping", appHandler.Ping)
 	r.POST("/logs", logsHandler.PostLogs)
 	r.GET("/logs/analytics", logsHandler.GetAnalytics)
+	r.POST("/logs/postgres", logsHandler.PostLogsIntoPostgres)
+	r.GET("/logs/postgres", logsHandler.ListLogsIntoPostgres)
 
 	return
 }

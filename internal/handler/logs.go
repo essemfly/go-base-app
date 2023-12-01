@@ -28,6 +28,8 @@ func (h *LogHandler) PostLogs(c *gin.Context) {
 	}
 
 	if err := h.Services.LogService.CreateLog(string(jsonData)); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
 	}
 
 	c.JSON(http.StatusOK, gin.H{"message": "로그 처리 완료"})
@@ -41,6 +43,16 @@ func (h *LogHandler) GetAnalytics(c *gin.Context) {
 	}
 
 	c.JSON(200, result)
+}
+
+func (h *LogHandler) ListLogsIntoPostgres(c *gin.Context) {
+	logs := h.Services.AnotherService.ListLogs()
+	c.JSON(200, logs)
+}
+
+func (h *LogHandler) PostLogsIntoPostgres(c *gin.Context) {
+	h.Services.MyService.WriteLog()
+	c.JSON(http.StatusOK, gin.H{"message": "로그 처리 완료"})
 }
 
 func NewLogsHandler(services *service.Services) *LogHandler {

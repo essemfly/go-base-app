@@ -1,15 +1,18 @@
 package service
 
-import "essemfly/go_base_app/internal/persistence/database"
+import (
+	"essemfly/go_base_app/internal/domain"
+	"essemfly/go_base_app/internal/persistence/postgres"
+)
 
 type AnotherService struct {
-	db database.DB
+	Repos *postgres.SQLRepository
 }
 
-func NewAnotherService(db database.DB) *AnotherService {
-	return &AnotherService{db: db}
+func NewAnotherService(repos *postgres.SQLRepository) *AnotherService {
+	return &AnotherService{Repos: repos}
 }
 
-func (s *AnotherService) SomeMethod() string {
-	return s.db.QuerySomething()
+func (s *AnotherService) ListLogs() []*domain.LogData {
+	return s.Repos.LogRepository.ListLogs()
 }

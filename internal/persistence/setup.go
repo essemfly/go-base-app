@@ -2,8 +2,8 @@ package persistence
 
 import (
 	"essemfly/go_base_app/config"
-	"essemfly/go_base_app/internal/persistence/database"
 	"essemfly/go_base_app/internal/persistence/kafka"
+	"essemfly/go_base_app/internal/persistence/postgres"
 	"essemfly/go_base_app/internal/persistence/redis"
 )
 
@@ -11,11 +11,11 @@ type Persistences struct {
 	KafkaProducer *kafka.KafkaProducer
 	KafkaConsumer *kafka.KafkaConsumer
 	RedisClient   *redis.Redis
-	SQLDatabase   *database.SQLDatabase
+	SQLDatabase   *postgres.SQLDatabase
 }
 
 func InitializePersistence(cfg config.Config) (*Persistences, error) {
-	db, err := database.NewSQLDatabase(cfg)
+	db, err := postgres.NewSQLDatabase(cfg)
 	if err != nil {
 		return nil, err
 	}
